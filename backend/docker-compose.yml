@@ -1,0 +1,39 @@
+version: '3.3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  api: 
+    build: ./
+    networks: 
+      - default
+    ports: 
+      - "3001:3001"
+    environment: 
+      PORT: 3001
+      DATABASE_URL: "mongodb://localhost/argentBankDB"
+    volumes:
+      - type: "bind"
+        source: "./"
+        target: "/app"
+    depends_on:
+      - mongodb
+    command: "npm run dev:server"
+
+  mongodb:
+    image: mongo
+    restart: always
+    networks:
+      - default
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    
+
+  
