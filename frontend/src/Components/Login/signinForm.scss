@@ -47,3 +47,24 @@
     padding: 5px;
     font-size: 1.2rem;
   }
+
+  .instructions {
+    color: white;
+    text-align: center;
+    padding: 10px;
+    background-color: #12002b;
+  }
+  .offScreen {
+    display: none;
+  }
+
+  .userIcon {
+    font-size: 5rem;
+  }
+
+  .errmsg {
+    color: white;
+    text-align: center;
+    padding: 10px;
+    background-color:#2f5935;
+  }
