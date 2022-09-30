@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './Components/Layout'
 import Error from './Pages/Error'
 import Home from './Pages/Home'
@@ -9,20 +9,22 @@ import './styles/index.scss'
 
 const ReactRouter = () => {
    return (
-      <Routes>
-         <Route path="/" element={<Layout />}>
-            {/* public routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            {/* private routes */}
+      <BrowserRouter>
+         <Routes>
+            <Route path="/" element={<Layout />}>
+               {/* public routes */}
+               <Route path="/" element={<Home />} />
+               <Route path="/signin" element={<SignIn />} />
+               <Route path="/unauthorized" element={<Unauthorized />} />
+               {/* private routes */}
 
-            <Route path="/profile" element={<ProfilePage />} />
+               <Route path="/profile" element={<ProfilePage />} />
 
-            {/* catch all other routes */}
-            <Route path="*" element={<Error />} />
-         </Route>
-      </Routes>
+               {/* catch all other routes */}
+               <Route path="*" element={<Error />} />
+            </Route>
+         </Routes>
+      </BrowserRouter>
    )
 }
 

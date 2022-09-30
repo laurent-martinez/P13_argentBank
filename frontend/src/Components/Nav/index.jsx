@@ -1,7 +1,10 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { FaSignOutAlt, FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import './nav.scss'
 
 const Nav = () => {
+   const { isAuth } = useSelector((state) => state.login)
    return (
       <nav className="main-nav">
          <Link className="main-nav-logo" to="/">
@@ -13,10 +16,23 @@ const Nav = () => {
             <h1 className="sr-only">Argent Bank</h1>
          </Link>
          <div>
-            <Link className="main-nav-item" to="/signin">
-               <i className="fa fa-user-circle"></i>
-               Sign In
-            </Link>
+            {isAuth ? (
+               <>
+                  <Link className="main-nav-item" to="/signin">
+                     <FaUserCircle className="fa" />
+                     Sign In
+                  </Link>
+                  <Link className="main-nav-item" to="/">
+                     <FaSignOutAlt className="fa" />
+                     Sign Out
+                  </Link>
+               </>
+            ) : (
+               <Link className="main-nav-item" to="/signin">
+                  <FaUserCircle className="fa" />
+                  Sign In
+               </Link>
+            )}
          </div>
       </nav>
    )

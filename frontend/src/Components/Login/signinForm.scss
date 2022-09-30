@@ -66,5 +66,20 @@
     color: white;
     text-align: center;
     padding: 10px;
-    background-color:#2f5935;
+    background-color:red;
   }
+
+  .rotate {
+    margin-top: 15px;
+    font-size: 35px;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,27 +1,29 @@
 import { useRef, useState, useEffect } from 'react'
-import axios from 'axios'
+import { loginPending, loginSuccess, loginFail } from './login.slice'
 import { FcOk } from 'react-icons/fc'
-import { FaUserCircle, FaInfoCircle } from 'react-icons/fa'
+import { FaUserCircle, FaInfoCircle, FaSpinner } from 'react-icons/fa'
 import './signinForm.scss'
 import { useNavigate } from 'react-router-dom'
+import { userLogin } from '../../api/userApi'
+import { useSelector, useDispatch } from 'react-redux'
 
 const userRegex =
    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const pswdRegex = /^[a-zA-Z0-9]{5,23}$/
 
-const BASE_URL = 'http://localhost:3001/api/v1/user/'
 const Login = () => {
+   const [remember, setRemember] = useState(false)
    const userRef = useRef()
    const errRef = useRef()
    const navigate = useNavigate()
-   const [userName, setUserName] = useState('')
-   const [validName, setValidName] = useState(false)
-   const [userNameFocus, setUserNameFocus] = useState(false)
-
+   const dispatch = useDispatch()
+   const [email, setEmail] = useState('')
+   const [validEmail, setValidEmail] = useState(false)
+   const [emailFocus, setEmailFocus] = useState(false)
+   const { isLoading, isAuth, error } = useSelector((state) => state.login)
    const [password, setPassword] = useState('')
    const [validPswd, setValidPswd] = useState(false)
    const [pswdFocus, setPswdFocus] = useState(false)
-
    const [err, setErr] = useState('error detected')
 
    useEffect(() => {
@@ -29,40 +31,49 @@ const Login = () => {
    }, [])
 
    useEffect(() => {
-      const result = userRegex.test(userName)
-      setValidName(result)
-   }, [userName])
-
-   useEffect(() => {
+      const result = userRegex.test(email)
       const result2 = pswdRegex.test(password)
+      setValidEmail(result)
       setValidPswd(result2)
-   }, [password])
-
-   useEffect(() => {
       setErr('')
-   }, [userName, password])
+   }, [email, password])
+
+   const handleOnChange = (e) => {
+      const { name, value } = e.target
+      switch (name) {
+         case 'email':
+            setEmail(value)
+            break
+         case 'password':
+            setPassword(value)
+            break
+         default:
+            break
+      }
+   }
+   const handleRemember = (e) => {
+      e.currentTarget.checked ? setRemember(true) : setRemember(false)
+   }
 
    const handleSubmit = async (e) => {
       e.preventDefault()
+
+      dispatch(loginPending())
       try {
-         const response = await axios.post(
-            BASE_URL + 'login',
-            { email: userName, password },
-            {
-               headers: { 'Content-Type': 'application/json' },
-            }
-         )
-         console.log(response.data)
-         if (response.data.status === 200) {
-            navigate('/profile')
+         const isAuth = await userLogin({ email, password }, remember)
+         if (isAuth.status === 'error') {
+            return dispatch(loginFail(isAuth.message))
          }
+
+         dispatch(loginSuccess())
+         navigate('/profile')
       } catch (err) {
          if (!err?.response) {
             setErr('No response from server')
          } else if (err.response?.status === 400) {
             setErr('Utilisateur inconnu')
          } else {
-            setErr('error')
+            dispatch(loginFail(error.message))
          }
       }
    }
@@ -80,23 +91,24 @@ const Login = () => {
          <h1>Sign In</h1>
          <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
-               <label htmlFor="username">
-                  Username {userNameFocus && userName && validName && <FcOk />}{' '}
+               <label htmlFor="email">
+                  Username {emailFocus && email && validEmail && <FcOk />}{' '}
                </label>
                <input
                   type="email"
-                  id="username"
+                  id="email"
+                  name="email"
                   ref={userRef}
                   required
-                  value={userName}
+                  value={email}
                   autoComplete="off"
-                  onChange={(e) => setUserName(e.target.value)}
-                  onFocus={() => setUserNameFocus(true)}
-                  onBlur={() => setUserNameFocus(false)}
+                  onChange={handleOnChange}
+                  onFocus={() => setEmailFocus(true)}
+                  onBlur={() => setEmailFocus(false)}
                />
                <p
                   className={
-                     userNameFocus && userName && !validName
+                     emailFocus && email && !validEmail
                         ? 'instructions'
                         : 'offScreen'
                   }
@@ -112,9 +124,10 @@ const Login = () => {
                <input
                   type="password"
                   id="password"
+                  name="password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handleOnChange}
                   onFocus={() => setPswdFocus(true)}
                   onBlur={() => setPswdFocus(false)}
                />
@@ -126,20 +139,27 @@ const Login = () => {
                   }
                >
                   <FaInfoCircle /> Invalid password.
-                  <br /> alpha-numeric && must be between 5 and 23 characters.
+                  <br /> alpha-numeric & must be between 5 and 23 characters.
                </p>
             </div>
             <div className="input-remember">
-               <input type="checkbox" id="remember-me" />
+               <input
+                  type="checkbox"
+                  id="remember-me"
+                  onClick={handleRemember}
+               />
                <label htmlFor="remember-me">Remember me</label>
             </div>
 
             <button
                className="sign-in-button"
-               disabled={!validName || !validPswd ? true : false}
+               disabled={!validEmail || !validPswd ? true : false}
             >
                Sign In
             </button>
+            {isLoading && validEmail && validPswd && (
+               <FaSpinner className="rotate" />
+            )}
          </form>
       </section>
    )
