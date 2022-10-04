@@ -19,17 +19,17 @@ const Nav = () => {
             {isAuth ? (
                <>
                   <Link className="main-nav-item" to="/signin">
-                     <FaUserCircle className="fa" />
+                     <i className="fa fa-user-circle"></i>
                      Sign In
                   </Link>
                   <Link className="main-nav-item" to="/">
-                     <FaSignOutAlt className="fa" />
+                     <i className="fa fa-sign-out"></i>
                      Sign Out
                   </Link>
                </>
             ) : (
                <Link className="main-nav-item" to="/signin">
-                  <FaUserCircle className="fa" />
+                  <i className="fa fa-user-circle"></i>
                   Sign In
                </Link>
             )}

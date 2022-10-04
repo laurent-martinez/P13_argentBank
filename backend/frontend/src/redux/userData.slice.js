@@ -2,9 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
    isLoading: false,
-   userData: {},
+   userData: {
+      firstName: '',
+      lastName: '',
+   },
    error: '',
-   token: '',
 }
 
 const userDataSlice = createSlice({
@@ -16,7 +18,10 @@ const userDataSlice = createSlice({
       },
       userDataSuccess: (state, { payload }) => {
          state.isLoading = false
-         state.userData = payload.body.token
+         state.userData = {
+            firstName: payload.body.firstName,
+            lastName: payload.body,
+         }
          state.error = ''
       },
       userDataFail: (state, { payload }) => {

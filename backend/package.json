@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
+    "concurrently": "^7.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -20,8 +21,10 @@
   },
   "scripts": {
     "dev:server": "nodemon ./server/server.js",
+    "client": "cd frontend && npm run start",
     "populate-db": "node ./server/scripts/populateDatabase.js",
-    "server": "node ./server/server.js"
+    "server": "node ./server/server.js",
+    "dev": "concurrently -n 'server,client'  \"nodemon ./server/server.js\" \"npm run client\""
   },
   "devDependencies": {
     "nodemon": "^2.0.19"

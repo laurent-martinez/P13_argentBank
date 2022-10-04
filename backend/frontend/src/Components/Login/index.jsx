@@ -1,5 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
-import { loginPending, loginSuccess, loginFail } from './login.slice'
+import {
+   loginPending,
+   loginSuccess,
+   loginFail,
+   getToken,
+} from '../../redux/login.slice'
 import { FcOk } from 'react-icons/fc'
 import { FaUserCircle, FaInfoCircle, FaSpinner } from 'react-icons/fa'
 import './signinForm.scss'
@@ -16,6 +21,7 @@ const Login = () => {
    const userRef = useRef()
    const errRef = useRef()
    const navigate = useNavigate()
+
    const dispatch = useDispatch()
    const [email, setEmail] = useState('')
    const [validEmail, setValidEmail] = useState(false)
@@ -62,11 +68,12 @@ const Login = () => {
       try {
          const isAuth = await userLogin({ email, password }, remember)
          if (isAuth.status === 'error') {
-            return dispatch(loginFail(isAuth.message))
+            return dispatch(loginFail())
          }
+         console.log(isAuth)
 
          dispatch(loginSuccess())
-         navigate('/profile')
+         dispatch(getToken())
       } catch (err) {
          if (!err?.response) {
             setErr('No response from server')
@@ -77,6 +84,8 @@ const Login = () => {
          }
       }
    }
+   const { token } = useSelector((state) => state.login)
+   console.log('tell me', token)
 
    return (
       <section className="sign-in-content">
@@ -87,7 +96,7 @@ const Login = () => {
          >
             {err}
          </p>
-         <FaUserCircle className="userIcon" />
+         <i className="fa fa-user-circle login_logo"></i>
          <h1>Sign In</h1>
          <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
