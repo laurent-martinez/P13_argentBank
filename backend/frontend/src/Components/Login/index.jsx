@@ -70,10 +70,10 @@ const Login = () => {
          if (isAuth.status === 'error') {
             return dispatch(loginFail())
          }
-         console.log(isAuth)
+         console.log('res', isAuth)
 
          dispatch(loginSuccess())
-         dispatch(getToken())
+         navigate('/profile')
       } catch (err) {
          if (!err?.response) {
             setErr('No response from server')
@@ -84,8 +84,6 @@ const Login = () => {
          }
       }
    }
-   const { token } = useSelector((state) => state.login)
-   console.log('tell me', token)
 
    return (
       <section className="sign-in-content">

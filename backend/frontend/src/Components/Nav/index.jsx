@@ -1,10 +1,23 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { FaSignOutAlt, FaUserCircle } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '../../redux/login.slice'
 import './nav.scss'
 
 const Nav = () => {
-   const { isAuth } = useSelector((state) => state.login)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+   const handleLogout = () => {
+      dispatch(logout())
+      localStorage.removeItem('token')
+      sessionStorage.removeItem('accessToken')
+      navigate('/')
+   }
+   const { firstName } = useSelector((state) => state.user)
+   const isAuth =
+      localStorage.getItem('token') || sessionStorage.getItem('accessToken')
+   console.log(isAuth)
+
    return (
       <nav className="main-nav">
          <Link className="main-nav-logo" to="/">
@@ -18,11 +31,11 @@ const Nav = () => {
          <div>
             {isAuth ? (
                <>
-                  <Link className="main-nav-item" to="/signin">
+                  <Link className="main-nav-item" to="/profile">
                      <i className="fa fa-user-circle"></i>
-                     Sign In
+                     {firstName}
                   </Link>
-                  <Link className="main-nav-item" to="/">
+                  <Link className="main-nav-item" to="/" onClick={handleLogout}>
                      <i className="fa fa-sign-out"></i>
                      Sign Out
                   </Link>

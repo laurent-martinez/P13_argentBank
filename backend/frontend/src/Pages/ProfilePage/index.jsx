@@ -1,23 +1,29 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useInfos } from '../../api/userApi'
 import Account from '../../Components/Account'
 import Footer from '../../Components/Footer'
 import Header from '../../Components/Header'
 import Nav from '../../Components/Nav'
-import { userInfos } from '../../api/userApi'
+import { userFirstName, userLastName } from '../../redux/userData.slice'
+
 import './profilePage.scss'
 
 const ProfilePage = () => {
-   const [first, setFirst] = useState('')
-   const [last, setLast] = useState('')
+   const dispatch = useDispatch()
+   useInfos().then((res) => {
+      console.log(res.body.lastName)
+      dispatch(userFirstName(res.body.firstName))
+      dispatch(userLastName(res.body.lastName))
+   })
 
-   const result = userInfos()
-   console.log(result)
-
+   const { token } = useSelector((state) => state.user)
+   console.log('tok tok', token)
    return (
       <>
          <Nav />
          <main className="main bg-dark">
-            <Header name={[first, last]} />
+            <Header />
             <h2 className="sr-only">Accounts</h2>
             <Account />
             <Account />

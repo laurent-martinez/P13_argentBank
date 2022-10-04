@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { userFirstName, userLastName } from '../redux/userData.slice'
 
 export const userLogin = (loginData, remember) => {
    const LOGIN_URL = 'login'
@@ -8,6 +10,7 @@ export const userLogin = (loginData, remember) => {
             process.env.REACT_APP_BASE_URL + LOGIN_URL,
             loginData
          )
+
          resolve(response.data)
 
          if (response.data.status === 200) {
@@ -21,7 +24,7 @@ export const userLogin = (loginData, remember) => {
    })
 }
 
-export const userInfos = () => {
+export const useInfos = () => {
    const PROFILE_URL = 'profile'
    return new Promise(async (resolve, reject) => {
       try {
@@ -42,8 +45,10 @@ export const userInfos = () => {
                },
             }
          )
-         console.log(response.data)
+         console.log('user data', response.data.body.firstName)
          resolve(response.data)
+
+         console.log('test test', resolve.body.firstName)
       } catch (err) {
          reject(err)
       }

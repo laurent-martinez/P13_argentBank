@@ -2,10 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
    isLoading: false,
-   userData: {
-      firstName: '',
-      lastName: '',
-   },
+   firstName: '',
+   lastName: '',
    error: '',
 }
 
@@ -16,12 +14,14 @@ const userDataSlice = createSlice({
       userDataPending: (state) => {
          state.isLoading = true
       },
-      userDataSuccess: (state, { payload }) => {
+      userFirstName: (state, { payload }) => {
          state.isLoading = false
-         state.userData = {
-            firstName: payload.body.firstName,
-            lastName: payload.body,
-         }
+         state.firstName = payload.firstName
+         state.error = ''
+      },
+      userLastName: (state, { payload }) => {
+         state.isLoading = false
+         state.lastName = payload.lastName
          state.error = ''
       },
       userDataFail: (state, { payload }) => {
@@ -33,6 +33,7 @@ const userDataSlice = createSlice({
 
 const { reducer, actions } = userDataSlice
 
-export const { userDataPending, userDataSuccess, userDataFail } = actions
+export const { userDataPending, userFirstName, userLastName, userDataFail } =
+   actions
 
 export default reducer

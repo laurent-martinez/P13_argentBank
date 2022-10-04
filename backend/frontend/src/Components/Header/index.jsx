@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { useSelector } from 'react-redux'
+
 import './Header.scss'
 
-const Header = ({ name }) => {
-   const [edit, setEdit] = useState(false)
+const Header = () => {
+   const { firstName, lastName } = useSelector((state) => state.user)
+
    return (
       <div className="header">
          <h1>
             Welcome back
             <br />
-            {`${name[0]} ${name[1]}`}
+            {firstName + ' ' + lastName}
          </h1>
          <button className="edit-button">Edit Name</button>
       </div>
