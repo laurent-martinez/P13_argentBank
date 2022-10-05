@@ -16,12 +16,12 @@ const userDataSlice = createSlice({
       },
       userFirstName: (state, { payload }) => {
          state.isLoading = false
-         state.firstName = payload.firstName
+         state.firstName = payload
          state.error = ''
       },
       userLastName: (state, { payload }) => {
          state.isLoading = false
-         state.lastName = payload.lastName
+         state.lastName = payload
          state.error = ''
       },
       userDataFail: (state, { payload }) => {

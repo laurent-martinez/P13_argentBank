@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useInfos } from '../../api/userApi'
 import Account from '../../Components/Account'
 import Footer from '../../Components/Footer'
@@ -17,8 +16,6 @@ const ProfilePage = () => {
       dispatch(userLastName(res.body.lastName))
    })
 
-   const { token } = useSelector((state) => state.user)
-   console.log('tok tok', token)
    return (
       <>
          <Nav />

@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux'
-
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/login.slice'
 import './nav.scss'
@@ -14,9 +13,9 @@ const Nav = () => {
       navigate('/')
    }
    const { firstName } = useSelector((state) => state.user)
-   const isAuth =
+   // const { token } = useSelector((state) => state.login)
+   const token =
       localStorage.getItem('token') || sessionStorage.getItem('accessToken')
-   console.log(isAuth)
 
    return (
       <nav className="main-nav">
@@ -29,7 +28,7 @@ const Nav = () => {
             <h1 className="sr-only">Argent Bank</h1>
          </Link>
          <div>
-            {isAuth ? (
+            {token ? (
                <>
                   <Link className="main-nav-item" to="/profile">
                      <i className="fa fa-user-circle"></i>

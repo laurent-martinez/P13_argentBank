@@ -24,8 +24,9 @@ export const userLogin = (loginData, remember) => {
    })
 }
 
+const PROFILE_URL = 'profile'
+
 export const useInfos = () => {
-   const PROFILE_URL = 'profile'
    return new Promise(async (resolve, reject) => {
       try {
          const accessToken =
@@ -51,6 +52,35 @@ export const useInfos = () => {
          console.log('test test', resolve.body.firstName)
       } catch (err) {
          reject(err)
+      }
+   })
+}
+
+export const userUpdateProfile = (newUserNames) => {
+   console.log(newUserNames)
+   return new Promise(async (resolve, reject) => {
+      try {
+         const accessToken =
+            sessionStorage.getItem('accessToken') ||
+            localStorage.getItem('token')
+
+         const res = await axios.put(
+            process.env.REACT_APP_BASE_URL + PROFILE_URL,
+            newUserNames,
+            {
+               headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer${accessToken}`,
+               },
+            }
+         )
+
+         resolve(res.data)
+         console.log(resolve)
+      } catch (error) {
+         console.log('error userUpDate')
+         console.log(error)
+         reject(error)
       }
    })
 }

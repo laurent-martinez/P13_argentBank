@@ -6,7 +6,7 @@ import {
    getToken,
 } from '../../redux/login.slice'
 import { FcOk } from 'react-icons/fc'
-import { FaUserCircle, FaInfoCircle, FaSpinner } from 'react-icons/fa'
+import { FaInfoCircle, FaSpinner } from 'react-icons/fa'
 import './signinForm.scss'
 import { useNavigate } from 'react-router-dom'
 import { userLogin } from '../../api/userApi'
@@ -26,7 +26,7 @@ const Login = () => {
    const [email, setEmail] = useState('')
    const [validEmail, setValidEmail] = useState(false)
    const [emailFocus, setEmailFocus] = useState(false)
-   const { isLoading, isAuth, error } = useSelector((state) => state.login)
+   const { isLoading, error } = useSelector((state) => state.login)
    const [password, setPassword] = useState('')
    const [validPswd, setValidPswd] = useState(false)
    const [pswdFocus, setPswdFocus] = useState(false)
@@ -73,6 +73,7 @@ const Login = () => {
          console.log('res', isAuth)
 
          dispatch(loginSuccess())
+         dispatch(getToken(isAuth.body.token))
          navigate('/profile')
       } catch (err) {
          if (!err?.response) {
