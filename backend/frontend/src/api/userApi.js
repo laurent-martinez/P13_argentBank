@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { userFirstName, userLastName } from '../redux/userData.slice'
 
 export const userLogin = (loginData, remember) => {
    const LOGIN_URL = 'login'
@@ -46,18 +44,15 @@ export const useInfos = () => {
                },
             }
          )
-         console.log('user data', response.data.body.firstName)
-         resolve(response.data)
 
-         console.log('test test', resolve.body.firstName)
+         resolve(response.data)
       } catch (err) {
          reject(err)
       }
    })
 }
 
-export const userUpdateProfile = (newUserNames) => {
-   console.log(newUserNames)
+export const userUpdateProfile = (userFirstLastName) => {
    return new Promise(async (resolve, reject) => {
       try {
          const accessToken =
@@ -66,7 +61,7 @@ export const userUpdateProfile = (newUserNames) => {
 
          const res = await axios.put(
             process.env.REACT_APP_BASE_URL + PROFILE_URL,
-            newUserNames,
+            userFirstLastName,
             {
                headers: {
                   'Content-Type': 'application/json',
@@ -76,7 +71,6 @@ export const userUpdateProfile = (newUserNames) => {
          )
 
          resolve(res.data)
-         console.log(resolve)
       } catch (error) {
          console.log('error userUpDate')
          console.log(error)

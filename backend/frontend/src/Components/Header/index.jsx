@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userUpdateProfile } from '../../api/userApi'
 import {
@@ -13,46 +13,57 @@ import './Header.scss'
 const Header = () => {
    const dispatch = useDispatch()
    const { firstName, lastName } = useSelector((state) => state.user)
-   const [editFirstName, setEditFirstName] = useState('')
-   const [editLastName, setEditLastName] = useState('')
    const [editButton, setEditButton] = useState(false)
+   const isLocalStorage = localStorage.getItem('token') === null
+   console.log('true or false', isLocalStorage)
+
+   const storageFirstName = isLocalStorage
+      ? null
+      : localStorage.setItem('firstName', firstName)
+
+   const storageLastName = isLocalStorage
+      ? null
+      : localStorage.setItem('lastName', lastName)
+
+   useEffect(() => {
+      if (storageFirstName && storageLastName) {
+         dispatch(userFirstName(storageFirstName))
+         dispatch(userLastName(storageLastName))
+      }
+   }, [dispatch, storageFirstName, storageLastName])
 
    const handleEditButton = (e) => {
       e.preventDefault()
       setEditButton((cur) => !cur)
    }
-   const handleOnChange = (e) => {
-      const { name, value } = e.target
-      switch (name) {
-         case 'editFirstName':
-            setEditFirstName(value)
-            break
-         case 'editLastName':
-            setEditLastName(value)
-            break
-         default:
-            break
-      }
+   const [userFirstLastName, setUserFirstLastName] = useState({
+      firstName: '',
+      lastName: '',
+   })
+
+   function handleChange({ currentTarget }) {
+      const { value, name } = currentTarget
+      setUserFirstLastName({
+         ...userFirstLastName,
+         [name]: value,
+      })
    }
 
    const handleEditNames = async (e) => {
       e.preventDefault()
       dispatch(userDataPending())
       try {
-         const editUser = await userUpdateProfile({
-            editFirstName,
-            editLastName,
-         })
+         const editUser = await userUpdateProfile(userFirstLastName)
          console.log(editUser)
          dispatch(userFirstName(editUser.body.firstName))
          dispatch(userLastName(editUser.body.lastName))
+
          setEditButton((cur) => !cur)
       } catch (error) {
          dispatch(userDataFail(error.response.data.message))
       }
    }
 
-   console.log(editFirstName, editLastName)
    return (
       <>
          {!editButton ? (
@@ -75,9 +86,9 @@ const Header = () => {
                         className="InputfirstName"
                         type="text"
                         placeholder={firstName}
-                        name="editFirstName"
+                        name="firstName"
                         required
-                        onChange={handleOnChange}
+                        onChange={handleChange}
                      />
                      <button className="edit-button" type="submit">
                         Save
@@ -88,8 +99,8 @@ const Header = () => {
                         className="inputLastName"
                         type="text"
                         placeholder={lastName}
-                        name="editLastName"
-                        onChange={handleOnChange}
+                        name="lastName"
+                        onChange={handleChange}
                         required
                      />
                      <button className="edit-button" onClick={handleEditButton}>
