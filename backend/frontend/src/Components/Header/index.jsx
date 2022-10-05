@@ -80,10 +80,10 @@ const Header = () => {
          ) : (
             <div className="header">
                <h1>Welcome back</h1>
-               <form className="editNameContent" onSubmit={handleEditNames}>
-                  <div className="headerUserContentSave">
+               <form className="editName" onSubmit={handleEditNames}>
+                  <div className="firstInput-save">
                      <input
-                        className="InputfirstName"
+                        className="inputFirstName"
                         type="text"
                         placeholder={firstName}
                         name="firstName"
@@ -94,7 +94,7 @@ const Header = () => {
                         Save
                      </button>
                   </div>
-                  <div className="headerUserContentCancel">
+                  <div className="secondInput-cancel">
                      <input
                         className="inputLastName"
                         type="text"
