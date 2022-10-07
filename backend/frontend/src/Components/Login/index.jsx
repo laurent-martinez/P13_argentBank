@@ -4,6 +4,7 @@ import {
    loginSuccess,
    loginFail,
    getToken,
+   setRemember,
 } from '../../redux/login.slice'
 import { FcOk } from 'react-icons/fc'
 import { FaInfoCircle, FaSpinner } from 'react-icons/fa'
@@ -17,11 +18,11 @@ const userRegex =
 const pswdRegex = /^[a-zA-Z0-9]{5,23}$/
 
 const Login = () => {
-   const [remember, setRemember] = useState(false)
+   const { remember } = useSelector((state) => state.login)
    const userRef = useRef()
    const errRef = useRef()
    const navigate = useNavigate()
-
+   const { token } = useSelector((state) => state.login)
    const dispatch = useDispatch()
    const [email, setEmail] = useState('')
    const [validEmail, setValidEmail] = useState(false)
@@ -58,22 +59,19 @@ const Login = () => {
       }
    }
    const handleRemember = (e) => {
-      e.currentTarget.checked ? setRemember(true) : setRemember(false)
+      e.currentTarget.checked ? dispatch(setRemember(true)) : setRemember(false)
    }
 
    const handleSubmit = async (e) => {
       e.preventDefault()
-
       dispatch(loginPending())
       try {
          const isAuth = await userLogin({ email, password }, remember)
-         if (isAuth.status === 'error') {
-            return dispatch(loginFail())
-         }
-         console.log('res', isAuth)
-
+         console.log(remember)
          dispatch(loginSuccess())
          dispatch(getToken(isAuth.body.token))
+
+         console.log(token)
          navigate('/profile')
       } catch (err) {
          if (!err?.response) {

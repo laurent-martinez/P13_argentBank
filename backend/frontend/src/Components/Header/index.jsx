@@ -12,25 +12,24 @@ import './Header.scss'
 
 const Header = () => {
    const dispatch = useDispatch()
+   const { token } = useSelector((state) => state.login)
    const { firstName, lastName } = useSelector((state) => state.user)
    const [editButton, setEditButton] = useState(false)
-   const isLocalStorage = localStorage.getItem('token') === null
-   console.log('true or false', isLocalStorage)
+   // const isLocalStorage = localStorage.getItem('token') === null
+   // const storageFirstName = isLocalStorage
+   //    ? null
+   //    : localStorage.setItem('firstName', firstName)
 
-   const storageFirstName = isLocalStorage
-      ? null
-      : localStorage.setItem('firstName', firstName)
+   // const storageLastName = isLocalStorage
+   //    ? null
+   //    : localStorage.setItem('lastName', lastName)
 
-   const storageLastName = isLocalStorage
-      ? null
-      : localStorage.setItem('lastName', lastName)
-
-   useEffect(() => {
-      if (storageFirstName && storageLastName) {
-         dispatch(userFirstName(storageFirstName))
-         dispatch(userLastName(storageLastName))
-      }
-   }, [dispatch, storageFirstName, storageLastName])
+   // useEffect(() => {
+   //    if (storageFirstName && storageLastName) {
+   //       dispatch(userFirstName(storageFirstName))
+   //       dispatch(userLastName(storageLastName))
+   //    }
+   // }, [dispatch, storageFirstName, storageLastName])
 
    const handleEditButton = (e) => {
       e.preventDefault()
@@ -53,8 +52,7 @@ const Header = () => {
       e.preventDefault()
       dispatch(userDataPending())
       try {
-         const editUser = await userUpdateProfile(userFirstLastName)
-         console.log(editUser)
+         const editUser = await userUpdateProfile(userFirstLastName, token)
          dispatch(userFirstName(editUser.body.firstName))
          dispatch(userLastName(editUser.body.lastName))
 

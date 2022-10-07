@@ -22,7 +22,7 @@ const Home = () => {
          text: 'We use top of the line encryption to make sure your data and money is always safe.',
       },
    ]
-   console.log(value[0].title)
+
    return (
       <>
          <Nav />

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 export const userLogin = (loginData, remember) => {
    const LOGIN_URL = 'login'
@@ -11,11 +12,11 @@ export const userLogin = (loginData, remember) => {
 
          resolve(response.data)
 
-         if (response.data.status === 200) {
-            remember
-               ? localStorage.setItem('token', response.data.body.token)
-               : sessionStorage.setItem('accessToken', response.data.body.token)
-         }
+         // if (response.data.status === 200) {
+         //    remember
+         //       ? localStorage.setItem('token', response.data.body.token)
+         //       : sessionStorage.setItem('accessToken', response.data.body.token)
+         // }
       } catch (error) {
          reject(error)
       }
@@ -24,23 +25,20 @@ export const userLogin = (loginData, remember) => {
 
 const PROFILE_URL = 'profile'
 
-export const useInfos = () => {
+export const useInfos = (token) => {
    return new Promise(async (resolve, reject) => {
       try {
-         const accessToken =
-            sessionStorage.getItem('accessToken') ||
-            localStorage.getItem('token')
+         // const accessToken =
+         //    sessionStorage.getItem('accessToken') ||
+         //    localStorage.getItem('token')
 
-         if (!accessToken) {
-            reject('Token not found!')
-         }
          const response = await axios.post(
             process.env.REACT_APP_BASE_URL + PROFILE_URL,
             {},
             {
                headers: {
                   'Content-Type': 'application/json',
-                  Authorization: `Bearer${accessToken}`,
+                  Authorization: `Bearer ${token}`,
                },
             }
          )
@@ -52,12 +50,12 @@ export const useInfos = () => {
    })
 }
 
-export const userUpdateProfile = (userFirstLastName) => {
+export const userUpdateProfile = (userFirstLastName, token) => {
    return new Promise(async (resolve, reject) => {
       try {
-         const accessToken =
-            sessionStorage.getItem('accessToken') ||
-            localStorage.getItem('token')
+         // const accessToken =
+         //    sessionStorage.getItem('accessToken') ||
+         //    localStorage.getItem('token')
 
          const res = await axios.put(
             process.env.REACT_APP_BASE_URL + PROFILE_URL,
@@ -65,7 +63,7 @@ export const userUpdateProfile = (userFirstLastName) => {
             {
                headers: {
                   'Content-Type': 'application/json',
-                  Authorization: `Bearer${accessToken}`,
+                  Authorization: `Bearer${token}`,
                },
             }
          )

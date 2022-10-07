@@ -1,33 +1,32 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../../redux/login.slice'
-import { userFirstName } from '../../redux/userData.slice'
+import { logout, setRemember } from '../../redux/login.slice'
 import './nav.scss'
 
 const Nav = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
-
-   const storageFirstName = localStorage.getItem('firstName')
-   useEffect(() => {
-      if (storageFirstName) {
-         dispatch(userFirstName(storageFirstName))
-      }
-   }, [dispatch, storageFirstName])
-
+   // const storageFirstName = localStorage.getItem('firstName')
+   // useEffect(() => {
+   //    if (storageFirstName) {
+   //       dispatch(userFirstName(storageFirstName))
+   //    }
+   // }, [dispatch, storageFirstName])
+   // const token = localStorage.getItem('token')
    const { firstName } = useSelector((state) => state.user)
+
+   const { token, remember } = useSelector((state) => state.login)
 
    const handleLogout = () => {
       dispatch(logout())
+      dispatch(setRemember(false))
+      console.log(remember)
       localStorage.removeItem('token')
+      // localStorage.removeItem('firstName')
+      // localStorage.removeItem('lastName')
       sessionStorage.removeItem('accessToken')
       navigate('/')
    }
-   console.log(firstName)
-   // const { token } = useSelector((state) => state.login)
-   const token =
-      localStorage.getItem('token') || sessionStorage.getItem('accessToken')
 
    return (
       <nav className="main-nav">
