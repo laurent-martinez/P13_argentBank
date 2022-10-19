@@ -28,12 +28,22 @@ const userDataSlice = createSlice({
          state.isLoading = false
          state.error = payload
       },
+      userLogout: (state, { payload }) => {
+         state.firstName = ''
+         state.lastName = ''
+         state.error = ''
+      },
    },
 })
 
 const { reducer, actions } = userDataSlice
 
-export const { userDataPending, userFirstName, userLastName, userDataFail } =
-   actions
+export const {
+   userDataPending,
+   userFirstName,
+   userLastName,
+   userDataFail,
+   userLogout,
+} = actions
 
 export default reducer

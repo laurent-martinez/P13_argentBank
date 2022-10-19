@@ -12,6 +12,23 @@ import './profilePage.scss'
 const ProfilePage = () => {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.login)
+   const values = [
+      {
+         title: 'Argent Bank Checking (x8349)',
+         amount: 2082.79,
+         amountDescription: 'Available Balance',
+      },
+      {
+         title: 'Argent Bank Savings (x6712)',
+         amount: 10928.42,
+         amountDescription: 'Available Balance',
+      },
+      {
+         title: 'Argent Bank Credit Card (x8349)',
+         amount: 184.3,
+         amountDescription: 'Current Balance',
+      },
+   ]
    useInfos(token)
       .then((res) => {
          dispatch(userFirstName(res.body.firstName))
@@ -26,9 +43,21 @@ const ProfilePage = () => {
          <main className="main bg-dark">
             <Header />
             <h2 className="sr-only">Accounts</h2>
-            <Account />
-            <Account />
-            <Account />
+            <Account
+               title={values[0].title}
+               amount={values[0].amount}
+               amountDescription={values[0].amountDescription}
+            />
+            <Account
+               title={values[1].title}
+               amount={values[1].amount}
+               amountDescription={values[1].amountDescription}
+            />
+            <Account
+               title={values[2].title}
+               amount={values[2].amount}
+               amountDescription={values[2].amountDescription}
+            />
          </main>
          <Footer />
       </>

@@ -1,13 +1,12 @@
 import axios from 'axios'
-import { useSelector } from 'react-redux'
 
-export const userLogin = (loginData, remember) => {
+export const userLogin = (data) => {
    const LOGIN_URL = 'login'
    return new Promise(async (resolve, reject) => {
       try {
          const response = await axios.post(
             process.env.REACT_APP_BASE_URL + LOGIN_URL,
-            loginData
+            data
          )
 
          resolve(response.data)

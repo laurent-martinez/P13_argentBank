@@ -6,6 +6,7 @@ const initialState = {
    error: '',
    token: '',
    remember: false,
+   userEmail: '',
 }
 
 const loginSlice = createSlice({
@@ -15,15 +16,18 @@ const loginSlice = createSlice({
       loginPending: (state) => {
          state.isLoading = true
       },
-      loginSuccess: (state, { payload }) => {
+      loginSuccess: (state) => {
          state.isLoading = false
          state.isAuth = true
       },
       getToken: (state, { payload }) => {
          state.token = payload
       },
-      setRemember: (state) => {
-         state.remember = true
+      setRemember: (state, { payload }) => {
+         state.remember = payload
+      },
+      getEmail: (state, { payload }) => {
+         state.userEmail = payload
       },
       loginFail: (state, { payload }) => {
          state.isLoading = false
@@ -45,6 +49,7 @@ export const {
    logout,
    getToken,
    setRemember,
+   getEmail,
 } = actions
 
 export default reducer

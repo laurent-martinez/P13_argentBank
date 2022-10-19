@@ -5,6 +5,7 @@ import {
    loginFail,
    getToken,
    setRemember,
+   getEmail,
 } from '../../redux/login.slice'
 import { FcOk } from 'react-icons/fc'
 import { FaInfoCircle, FaSpinner } from 'react-icons/fa'
@@ -13,38 +14,60 @@ import { useNavigate } from 'react-router-dom'
 import { userLogin } from '../../api/userApi'
 import { useSelector, useDispatch } from 'react-redux'
 
+// regex
+/**
+ * regex for the validity of the user's email
+ * @variable userRegex
+ */
 const userRegex =
    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+/**
+ * regex for the validity of the user's password
+ * @variable pswdRegex
+ */
+
 const pswdRegex = /^[a-zA-Z0-9]{5,23}$/
 
+/**
+ * functionnal components for the login form
+ * @returns {html}
+ */
 const Login = () => {
-   const { remember } = useSelector((state) => state.login)
+   /**
+    * importing values from the store, in the login reducer
+    */
+   const { remember, userEmail, isLoading, error } = useSelector(
+      (state) => state.login
+   )
+   // define the ref
    const userRef = useRef()
    const errRef = useRef()
+   // defining the navigate hook
    const navigate = useNavigate()
-   const { token } = useSelector((state) => state.login)
+   // defining the dispatch hooks for redux toolkit
    const dispatch = useDispatch()
-   const [email, setEmail] = useState('')
+   // defining the states of variables not in the redux store
+   let [email, setEmail] = useState('')
    const [validEmail, setValidEmail] = useState(false)
    const [emailFocus, setEmailFocus] = useState(false)
-   const { isLoading, error } = useSelector((state) => state.login)
+   const [pswdFocus, setPswdFocus] = useState(false)
    const [password, setPassword] = useState('')
    const [validPswd, setValidPswd] = useState(false)
-   const [pswdFocus, setPswdFocus] = useState(false)
-   const [err, setErr] = useState('error detected')
-
+   // focus on first input when page load
    useEffect(() => {
       userRef.current.focus()
    }, [])
-
+   // testing form input for regex validation
    useEffect(() => {
       const result = userRegex.test(email)
+      const resultPrime = userRegex.test(userEmail)
       const result2 = pswdRegex.test(password)
-      setValidEmail(result)
+      setValidEmail(result || resultPrime)
       setValidPswd(result2)
-      setErr('')
-   }, [email, password])
+      dispatch(loginFail(''))
+   }, [email, password, userEmail, dispatch])
 
+   // listening form inputs to define values on change
    const handleOnChange = (e) => {
       const { name, value } = e.target
       switch (name) {
@@ -58,40 +81,63 @@ const Login = () => {
             break
       }
    }
+   // function who change the remember state
    const handleRemember = (e) => {
-      e.currentTarget.checked ? dispatch(setRemember(true)) : setRemember(false)
+      e.currentTarget.checked
+         ? dispatch(setRemember(true))
+         : dispatch(setRemember(false))
    }
-
+   /**
+    * function who deal the submit form
+    * @param {e}
+    */
    const handleSubmit = async (e) => {
+      // avoiding to refresh page when submit
       e.preventDefault()
+      // function is loading
       dispatch(loginPending())
       try {
+         // passing parameters to userLogin function who call the api
          const isAuth = await userLogin({ email, password }, remember)
-         console.log(remember)
+         // once api is fetched correctly dispatch login success reducer
          dispatch(loginSuccess())
+         // get the token from api response & dispatching it through getToken reducer
          dispatch(getToken(isAuth.body.token))
-
-         console.log(token)
+         // check if remember is true or false & dispatching the email value to userEmail
+         remember ? dispatch(getEmail(email)) : dispatch(getEmail(''))
+         // go to profile if everything is ok
          navigate('/profile')
-      } catch (err) {
-         if (!err?.response) {
-            setErr('No response from server')
-         } else if (err.response?.status === 400) {
-            setErr('Utilisateur inconnu')
+      } catch (er) {
+         // different error message
+         if (!er?.response) {
+            dispatch(loginFail('No response from server'))
+         } else if (er.response?.status === 400) {
+            dispatch(loginFail('Utilisateur inconnu'))
          } else {
             dispatch(loginFail(error.message))
          }
       }
+   }
+   // if email is empty giving userEmail if userEmail exist
+   email = email || userEmail
+
+   // allow to erase userEmail for login with another account
+   const handleErase = (e) => {
+      e.currentTarget.checked
+         ? dispatch(getEmail(''))
+         : dispatch(getEmail(email))
+      // avoid pre-check of the box
+      e.currentTarget.checked = false
    }
 
    return (
       <section className="sign-in-content">
          <p
             ref={errRef}
-            className={err ? 'errmsg' : 'offScreen'}
+            className={error ? 'errmsg' : 'offScreen'}
             aria-live="assertive"
          >
-            {err}
+            {error}
          </p>
          <i className="fa fa-user-circle login_logo"></i>
          <h1>Sign In</h1>
@@ -106,8 +152,9 @@ const Login = () => {
                   name="email"
                   ref={userRef}
                   required
-                  value={email}
                   autoComplete="off"
+                  placeholder={userEmail}
+                  value={email || userEmail}
                   onChange={handleOnChange}
                   onFocus={() => setEmailFocus(true)}
                   onBlur={() => setEmailFocus(false)}
@@ -148,14 +195,27 @@ const Login = () => {
                   <br /> alpha-numeric & must be between 5 and 23 characters.
                </p>
             </div>
-            <div className="input-remember">
-               <input
-                  type="checkbox"
-                  id="remember-me"
-                  onClick={handleRemember}
-               />
-               <label htmlFor="remember-me">Remember me</label>
-            </div>
+            {userEmail ? (
+               <div className="input-remember">
+                  <input
+                     type="checkbox"
+                     id="remember-me"
+                     onClick={handleErase}
+                  />
+                  <label htmlFor="remember-me">
+                     Log with different account
+                  </label>
+               </div>
+            ) : (
+               <div className="input-remember">
+                  <input
+                     type="checkbox"
+                     id="remember-me"
+                     onClick={handleRemember}
+                  />
+                  <label htmlFor="remember-me">Remember me</label>
+               </div>
+            )}
 
             <button
                className="sign-in-button"

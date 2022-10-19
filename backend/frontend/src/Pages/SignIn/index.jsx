@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
 import Footer from '../../Components/Footer'
 import Login from '../../Components/Login'
 import Nav from '../../Components/Nav'
@@ -7,8 +5,7 @@ import Nav from '../../Components/Nav'
 import './signin.scss'
 
 const SignIn = () => {
-   const { isAuth } = useSelector((state) => state.login)
-   return !isAuth ? (
+   return (
       <>
          <Nav />
          <main className="main bg-dark">
@@ -16,8 +13,6 @@ const SignIn = () => {
          </main>
          <Footer />
       </>
-   ) : (
-      <Navigate to="/" />
    )
 }
 

@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout, setRemember } from '../../redux/login.slice'
+import { userLogout } from '../../redux/userData.slice'
 import './nav.scss'
 
 const Nav = () => {
+   const { firstName } = useSelector((state) => state.user)
+   const { token } = useSelector((state) => state.login)
    const dispatch = useDispatch()
    const navigate = useNavigate()
    // const storageFirstName = localStorage.getItem('firstName')
@@ -13,18 +16,11 @@ const Nav = () => {
    //    }
    // }, [dispatch, storageFirstName])
    // const token = localStorage.getItem('token')
-   const { firstName } = useSelector((state) => state.user)
-
-   const { token, remember } = useSelector((state) => state.login)
 
    const handleLogout = () => {
       dispatch(logout())
-      dispatch(setRemember(false))
-      console.log(remember)
-      localStorage.removeItem('token')
-      // localStorage.removeItem('firstName')
-      // localStorage.removeItem('lastName')
-      sessionStorage.removeItem('accessToken')
+      dispatch(userLogout())
+
       navigate('/')
    }
 

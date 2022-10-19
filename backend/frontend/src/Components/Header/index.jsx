@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userUpdateProfile } from '../../api/userApi'
 import {
@@ -88,7 +88,7 @@ const Header = () => {
                         required
                         onChange={handleChange}
                      />
-                     <button className="edit-button" type="submit">
+                     <button className="edit-button put save" type="submit">
                         Save
                      </button>
                   </div>
@@ -101,7 +101,10 @@ const Header = () => {
                         onChange={handleChange}
                         required
                      />
-                     <button className="edit-button" onClick={handleEditButton}>
+                     <button
+                        className="edit-button put cancel"
+                        onClick={handleEditButton}
+                     >
                         Cancel
                      </button>
                   </div>

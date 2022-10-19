@@ -4,6 +4,7 @@ import Error from './Pages/Error'
 import Home from './Pages/Home'
 import ProfilePage from './Pages/ProfilePage'
 import SignIn from './Pages/SignIn'
+import Transactions from './Pages/Transactions'
 import './styles/index.scss'
 
 const ReactRouter = () => {
@@ -16,6 +17,7 @@ const ReactRouter = () => {
             {/* private routes */}
             <Route element={<PrivateRoutes />}>
                <Route path="/profile" element={<ProfilePage />} />
+               <Route path="/transactions" element={<Transactions />} />
             </Route>
 
             {/* catch all other routes */}
