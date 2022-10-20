@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userUpdateProfile } from '../../api/userApi'
 import {
+   getEditMode,
    userDataFail,
    userDataPending,
    userFirstName,
@@ -13,8 +14,8 @@ import './Header.scss'
 const Header = () => {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.login)
-   const { firstName, lastName } = useSelector((state) => state.user)
-   const [editButton, setEditButton] = useState(false)
+   const { firstName, lastName, editMode } = useSelector((state) => state.user)
+
    // const isLocalStorage = localStorage.getItem('token') === null
    // const storageFirstName = isLocalStorage
    //    ? null
@@ -33,7 +34,7 @@ const Header = () => {
 
    const handleEditButton = (e) => {
       e.preventDefault()
-      setEditButton((cur) => !cur)
+      dispatch(getEditMode(!editMode))
    }
    const [userFirstLastName, setUserFirstLastName] = useState({
       firstName: '',
@@ -56,7 +57,7 @@ const Header = () => {
          dispatch(userFirstName(editUser.body.firstName))
          dispatch(userLastName(editUser.body.lastName))
 
-         setEditButton((cur) => !cur)
+         dispatch(getEditMode(!editMode))
       } catch (error) {
          dispatch(userDataFail(error.response.data.message))
       }
@@ -64,7 +65,7 @@ const Header = () => {
 
    return (
       <>
-         {!editButton ? (
+         {!editMode ? (
             <div className="header">
                <h1>
                   Welcome back

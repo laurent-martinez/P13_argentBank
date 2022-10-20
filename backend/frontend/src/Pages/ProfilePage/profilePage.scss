@@ -1,0 +1,18 @@
+.edit-style {
+    background-color: lightgray;
+    &  div > h1 {
+        color: black;
+    }
+    &  div > form > div.secondInput-cancel > button, div > form > div.firstInput-save > button {
+        border-color: #8373eb;
+        background-color: white;
+        color:  #7461ec;
+    }
+    & section  {
+        border-color: #a8a8a8;
+        & div.account-content-wrapper.cta > a > button {
+            border-color: #7461ec;
+            background-color: #8373eb;
+        }
+    }
+}

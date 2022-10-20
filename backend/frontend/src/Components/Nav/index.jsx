@@ -5,7 +5,7 @@ import { userLogout } from '../../redux/userData.slice'
 import './nav.scss'
 
 const Nav = () => {
-   const { firstName } = useSelector((state) => state.user)
+   const { firstName, editMode } = useSelector((state) => state.user)
    const { token } = useSelector((state) => state.login)
    const dispatch = useDispatch()
    const navigate = useNavigate()
@@ -38,7 +38,13 @@ const Nav = () => {
             {token ? (
                <>
                   <Link className="main-nav-item" to="/profile">
-                     <i className="fa fa-user-circle"></i>
+                     <i
+                        className={
+                           editMode
+                              ? 'fa fa-user-circle editModeUserIcon'
+                              : 'fa fa-user-circle'
+                        }
+                     ></i>
                      {firstName}
                   </Link>
                   <Link className="main-nav-item" to="/" onClick={handleLogout}>

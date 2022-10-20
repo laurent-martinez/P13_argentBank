@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useInfos } from '../../api/userApi'
@@ -5,13 +6,21 @@ import Account from '../../Components/Account'
 import Footer from '../../Components/Footer'
 import Header from '../../Components/Header'
 import Nav from '../../Components/Nav'
-import { userFirstName, userLastName } from '../../redux/userData.slice'
+import {
+   getEditMode,
+   userFirstName,
+   userLastName,
+} from '../../redux/userData.slice'
 
 import './profilePage.scss'
 
 const ProfilePage = () => {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.login)
+   const { editMode } = useSelector((state) => state.user)
+   useEffect(() => {
+      dispatch(getEditMode(false))
+   }, [dispatch])
    const values = [
       {
          title: 'Argent Bank Checking (x8349)',
@@ -40,7 +49,7 @@ const ProfilePage = () => {
    return (
       <>
          <Nav />
-         <main className="main bg-dark">
+         <main className={editMode ? 'main edit-style' : 'main bg-dark'}>
             <Header />
             <h2 className="sr-only">Accounts</h2>
             <Account

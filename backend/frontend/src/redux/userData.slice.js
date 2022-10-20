@@ -5,6 +5,7 @@ const initialState = {
    firstName: '',
    lastName: '',
    error: '',
+   editMode: false,
 }
 
 const userDataSlice = createSlice({
@@ -33,6 +34,9 @@ const userDataSlice = createSlice({
          state.lastName = ''
          state.error = ''
       },
+      getEditMode: (state, { payload }) => {
+         state.editMode = payload
+      },
    },
 })
 
@@ -44,6 +48,7 @@ export const {
    userLastName,
    userDataFail,
    userLogout,
+   getEditMode,
 } = actions
 
 export default reducer

@@ -1,12 +1,19 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import Footer from '../../Components/Footer'
 import Nav from '../../Components/Nav'
+import { getEditMode } from '../../redux/userData.slice'
 import './transactions.scss'
 
 const Transactions = () => {
+   const dispatch = useDispatch()
+   useEffect(() => {
+      dispatch(getEditMode(true))
+   }, [dispatch])
    return (
       <div>
          <Nav />
-         <main className="main bg-dark">
+         <main className="main edit-style">
             <section className="transaction--hero">
                <h3 className="account-title">Argent Bank Checking (x8349)</h3>
                <p className="account-amount">$2,082.79</p>
