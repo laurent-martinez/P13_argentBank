@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout, setRemember } from '../../redux/login.slice'
+import { logout } from '../../redux/login.slice'
 import { userLogout } from '../../redux/userData.slice'
 import './nav.scss'
 
@@ -20,7 +20,6 @@ const Nav = () => {
    const handleLogout = () => {
       dispatch(logout())
       dispatch(userLogout())
-
       navigate('/')
    }
 
