@@ -73,7 +73,7 @@ const Header = () => {
                <h1>
                   Welcome back
                   <br />
-                  {firstName + ' ' + lastName}
+                  {firstName + ' ' + lastName}!
                </h1>
                <button className="edit-button" onClick={handleEditButton}>
                   Edit Name
