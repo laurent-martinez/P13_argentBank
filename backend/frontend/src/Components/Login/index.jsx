@@ -30,7 +30,8 @@ const pswdRegex = /^[a-zA-Z0-9]{5,23}$/
 
 /**
  * functionnal components for the login form
- * @returns {html}
+ * @component
+ * @returns {JSX.Element}
  */
 const Login = () => {
    /**
@@ -89,7 +90,8 @@ const Login = () => {
    }
    /**
     * function who deal the submit form
-    * @param {e}
+    * @function
+    * @param {object} e
     */
    const handleSubmit = async (e) => {
       // avoiding to refresh page when submit

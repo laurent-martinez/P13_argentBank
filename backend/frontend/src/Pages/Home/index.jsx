@@ -4,7 +4,16 @@ import Hero from '../../Components/Hero'
 import Nav from '../../Components/Nav'
 import './home.scss'
 
+/**
+ * landing page
+ * @component
+ * @returns {JSX.Element}
+ */
 const Home = () => {
+   /**
+    * array of values for the features
+    * @array
+    */
    const value = [
       {
          img: '/img/icon-chat.png',

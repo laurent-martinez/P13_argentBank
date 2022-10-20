@@ -1,6 +1,13 @@
 import axios from 'axios'
 
+/**
+ * function who call the api for log in & collect response data from the promise
+ *@function
+ * @param {object} data
+ * @returns {object}
+ */
 export const userLogin = (data) => {
+   console.log(data)
    const LOGIN_URL = 'login'
    return new Promise(async (resolve, reject) => {
       try {
@@ -8,9 +15,8 @@ export const userLogin = (data) => {
             process.env.REACT_APP_BASE_URL + LOGIN_URL,
             data
          )
-
          resolve(response.data)
-
+         console.log(response.data)
          // if (response.data.status === 200) {
          //    remember
          //       ? localStorage.setItem('token', response.data.body.token)
@@ -24,6 +30,12 @@ export const userLogin = (data) => {
 
 const PROFILE_URL = 'profile'
 
+/**
+ * api call to collect user info
+ * @function
+ * @param {string} token
+ * @returns {object}
+ */
 export const useInfos = (token) => {
    return new Promise(async (resolve, reject) => {
       try {
@@ -49,6 +61,13 @@ export const useInfos = (token) => {
    })
 }
 
+/**
+ * api call to change firstName & lastName to database
+ * @function
+ * @param {string} userFirstLastName
+ * @param {string} token
+ * @returns {object}
+ */
 export const userUpdateProfile = (userFirstLastName, token) => {
    return new Promise(async (resolve, reject) => {
       try {

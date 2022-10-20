@@ -5,11 +5,21 @@ import Nav from '../../Components/Nav'
 import { getEditMode } from '../../redux/userData.slice'
 import './transactions.scss'
 
+/**
+ * transactions page
+ * @component
+ * @returns {JSX.Element}
+ */
 const Transactions = () => {
    const dispatch = useDispatch()
+   /**
+    * change the editMode state to adapt style
+    * @hooks useEffect
+    */
    useEffect(() => {
       dispatch(getEditMode(true))
    }, [dispatch])
+
    return (
       <div>
          <Nav />

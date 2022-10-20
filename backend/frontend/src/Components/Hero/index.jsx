@@ -1,5 +1,10 @@
 import './Hero.scss'
 
+/**
+ * Hero component who display main picture of landing page
+ * @component
+ * @returns {JSX.Element}
+ */
 const Hero = () => {
    return (
       <div

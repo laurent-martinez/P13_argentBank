@@ -1,5 +1,10 @@
 import './footer.scss'
 
+/**
+ * Footer component
+ * @component
+ * @returns {JSX.Element}
+ */
 const Footer = () => {
    return (
       <footer className="footer">

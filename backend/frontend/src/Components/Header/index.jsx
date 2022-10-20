@@ -11,44 +11,46 @@ import {
 
 import './Header.scss'
 
+/**
+ * Header component for profile page
+ * @returns {JSX.Element}
+ */
 const Header = () => {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.login)
    const { firstName, lastName, editMode } = useSelector((state) => state.user)
-
-   // const isLocalStorage = localStorage.getItem('token') === null
-   // const storageFirstName = isLocalStorage
-   //    ? null
-   //    : localStorage.setItem('firstName', firstName)
-
-   // const storageLastName = isLocalStorage
-   //    ? null
-   //    : localStorage.setItem('lastName', lastName)
-
-   // useEffect(() => {
-   //    if (storageFirstName && storageLastName) {
-   //       dispatch(userFirstName(storageFirstName))
-   //       dispatch(userLastName(storageLastName))
-   //    }
-   // }, [dispatch, storageFirstName, storageLastName])
-
-   const handleEditButton = (e) => {
-      e.preventDefault()
-      dispatch(getEditMode(!editMode))
-   }
    const [userFirstLastName, setUserFirstLastName] = useState({
       firstName: '',
       lastName: '',
    })
+   /**
+    * change the state of editMode with redux
+    * @function
+    *  @param {object} e
+    */
+   const handleEditButton = (e) => {
+      e.preventDefault()
+      dispatch(getEditMode(!editMode))
+   }
 
+   /**
+    * change value of userFirstLastName through input's change
+    * @function
+    * @param {HTML.Element} currentTarget
+    */
    function handleChange({ currentTarget }) {
+      console.log(currentTarget)
       const { value, name } = currentTarget
       setUserFirstLastName({
          ...userFirstLastName,
          [name]: value,
       })
    }
-
+   /**
+    * handle saving firstName & lastName to the database
+    * @function
+    * @param {object} e
+    */
    const handleEditNames = async (e) => {
       e.preventDefault()
       dispatch(userDataPending())
@@ -65,6 +67,7 @@ const Header = () => {
 
    return (
       <>
+         {/* ternary who listen editMode state to render the edition profile page or regular profile page */}
          {!editMode ? (
             <div className="header">
                <h1>

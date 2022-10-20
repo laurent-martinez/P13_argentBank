@@ -1,7 +1,7 @@
 ### Initialiser le projet ###
 
 A-- dans un terminal à la racine de votre ordinateur lancer la commande :
-
+        (installer mongoDB https://www.mongodb.com/)
         ****** "mongod" ****************** // lance mongodb sur le port localhost:27017//
 
 B-- dans un terminal dans la partie backend lancer la commande:

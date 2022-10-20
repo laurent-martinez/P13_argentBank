@@ -4,19 +4,22 @@ import { logout } from '../../redux/login.slice'
 import { userLogout } from '../../redux/userData.slice'
 import './nav.scss'
 
+/**
+ * Nav component who deals with connections to render navBar items
+ * @component
+ * @returns {JSX.Element}
+ */
 const Nav = () => {
    const { firstName, editMode } = useSelector((state) => state.user)
    const { token } = useSelector((state) => state.login)
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   // const storageFirstName = localStorage.getItem('firstName')
-   // useEffect(() => {
-   //    if (storageFirstName) {
-   //       dispatch(userFirstName(storageFirstName))
-   //    }
-   // }, [dispatch, storageFirstName])
-   // const token = localStorage.getItem('token')
 
+   /**
+    * function who handle logout by dispatching the logouts to reducers & redirect to landing page
+    * @function
+    *
+    */
    const handleLogout = () => {
       dispatch(logout())
       dispatch(userLogout())
@@ -34,6 +37,8 @@ const Nav = () => {
             <h1 className="sr-only">Argent Bank</h1>
          </Link>
          <div>
+            {/* ternaries, one for render the nav icon depending on connection status 
+            & one to change logged icon color if we are on edit pages */}
             {token ? (
                <>
                   <Link className="main-nav-item" to="/profile">
